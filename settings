@@ -1,0 +1,14 @@
+#
+# These are global variables imported into the build script 
+#
+
+# This is used when building the release
+AUTHOR=''
+
+# The key number used to sign the PGP
+GPG_KEY=''
+
+# PGP Password if used
+GPG_PASSWORD=''
+
+
