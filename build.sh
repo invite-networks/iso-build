@@ -91,22 +91,8 @@ source bin/chroot_clean.sh
 # Get the list of installed packages on the filesystem 
 source bin/copy_packages.sh
 
-#Packages Hash
-pushd ${ISO_DIR} &>/dev/null
-
-	sudo apt-ftparchive generate ${REPO_DIR}/apt-udeb.conf 
-	sudo apt-ftparchive generate ${REPO_DIR}/apt-deb.conf
-	sudo apt-ftparchive -c ${REPO_DIR}/apt-release.conf release dists/stable | sudo tee dists/stable/Release
-	
-	if [[ -z ${GPG_PASSWORD} ]]; then
-		sudo gpg --yes -u ${GPG_KEY} --sign -bao dists/stable/Release.gpg dists/stable/Release
-	else
-		sudo gpg --yes -u ${GPG_KEY} --passphrase "${GPG_PASSWORD}" --sign -bao dists/stable/Release.gpg dists/stable/Release
-	fi
-
-	checkReturn $? "GPG signing failed"
-
-popd &>/dev/null
+# Generate Packages Hash
+source bin/hash_packages.sh
 
 # Build ISO
 pushd ${BUILD_DIR} &>/dev/null

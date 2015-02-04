@@ -10,12 +10,34 @@ if [[ -z {$GPG_KEY} ]]; then
 	exit 2
 fi
 
-# We will build an ubuntu image by default
-${IMAGE_NAME:='ubuntu-custom'}
+# This is where we specify variables for the build type
+# Variables defined in the settings file will be be used instead of these if they are defined
+if [ ${BUILD_TYPE} == 'ubuntu' ]; then
+	${BUILD_NAME:='trusty'}
+	${IMAGE_NAME:='ubuntu-custom'}
+	${PACKAGE_URL:='http://archive.ubuntu.com/ubuntu'}
+
+	if [ ${BUILD_NAME} == 'trusty' ]
+		${ORIG_ISO:='ubuntu-14.04.1-server-amd64.iso'}
+		${ORIG_ISO_DOWNLOAD:="http://releases.ubuntu.com/14.04.1/${ORIG_ISO}"}
+	else
+		echo 'We did not find a ${BUILD_NAME} that is supported for ubuntu!'
+		exit 2
+
+	fi
+
+#elif [ ${BUILD_TYPE} == 'debian' ]; then
+
+else
+	echo 'A ${BUILD_TYPE} of ubuntu or debian must be defined'
+
+fi
+
+# Author of the ISO
+${AUTHOR:='INVITE Networks'}
+
+# Version for ISO name 
 ${IMAGE_VERSION:='1'}
-${ORIG_ISO:='ubuntu-14.04.1-server-amd64.iso'}
-${ORIG_ISO_DOWNLOAD:="http://releases.ubuntu.com/14.04.1/${ORIG_ISO}"}
-${PACKAGE_URL:='http://archive.ubuntu.com/ubuntu'}
 
 # Drop the iso to get the name
 ORIG_NAME=$(echo "${ORIG_ISO}" | awk -F'.iso' '{print $1}') 
@@ -48,5 +70,5 @@ OVERLAYS_DIR="${PROJECT_DIR}/overlays"
 COMMANDS_DIR="${PROJECT_DIR}/commands"
 
 # Information to build a repo
-REPO_DIR="${BASE_DIR}/repo"
+REPO_DIR="${BUILD_DIR}/repo"
 
