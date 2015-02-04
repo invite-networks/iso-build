@@ -4,7 +4,6 @@
 function checkReturn {
         if [ $1 -ne 0 ]; then
                 echo "FAIL: $2"
-                echo "$3"
 
 		exit_clean $1
 

@@ -10,7 +10,9 @@ pushd {$BUILD_DIR} &> /dev/null
 # DNS Support
 echo 'nameserver 4.2.2.2' | sudo tee ${CHROOT_DIR}/etc/resolv.conf
 
-# Copy local packages
+# Copy local packages into the chroot
+sudo gpg --export -a ${GPG_KEY} > ${IMPORT_DIR}/gpg.key
+checkReturn $? "GPG export for key ${GPG_KEY}"
 sudo cp -r ${IMPORT_DIR} ${CHROOT_DIR}/.
 
 # Mounts

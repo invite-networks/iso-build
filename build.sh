@@ -34,7 +34,7 @@ else
 	fi
 fi
 
-# Check that the settings file is with the build script 
+# Check that the projects directory is with the build script 
 # We do this to be sure the script hasn't been moved so we don't cause any problems
 if [[ ! -d "${BASE_DIR}/projects" ]]; then
 	echo "We did not find a project directory with the build script!"
@@ -44,8 +44,8 @@ if [[ ! -d "${BASE_DIR}/projects" ]]; then
 fi
 
 # Run the supporting scripts
-source ${PROJECT_DIR}/settings
 source ${BASE_DIR}/settings 
+source ${PROJECT_DIR}/settings
 source ${BASE_DIR}/bin/global_settings.sh 
 source ${BASE_DIR}/bin/functions.sh
 source ${BASE_DIR}/bin/project_init.sh
@@ -89,30 +89,7 @@ source bin/chroot_commands.sh
 source bin/chroot_clean.sh
 
 # Get the list of installed packages on the filesystem 
-if [[ ! -z ${COPY_PACKAGES} ]]; then
-	for PACKAGE in $(sudo chroot ${CHROOT_DIR} dpkg-query -W --showformat='${Package}\n'); do
-
-	        # Filenames from apt-cache may be multiple
-	        FILES=$(sudo chroot ${CHROOT_DIR} apt-cache show ${PACKAGE} | grep Filename | cut -d ' ' -f2)
-
-	        # If we don't have a filename check locally for the install
-	        if [[ -z "$FILES" ]]; then
-	                FILE=$(ls ${IMPORT_DIR}/${PACKAGE}_*.deb 2>/dev/null)
-	                RETVAL=$?
-
-	                checkReturn ${RETVAL} "LOCAL FILE SEARCH - ${PACKAGE}"
-
-	                copyOrDownload ${FILE}
-
-	        else
-	                for FILE in $FILES; do
-
-	                        copyOrDownload ${FILE}
-
-	                done
-	        fi
-	done
-fi
+source bin/copy_packages.sh
 
 #Packages Hash
 pushd ${ISO_DIR} &>/dev/null
@@ -120,7 +97,14 @@ pushd ${ISO_DIR} &>/dev/null
 	sudo apt-ftparchive generate ${REPO_DIR}/apt-udeb.conf 
 	sudo apt-ftparchive generate ${REPO_DIR}/apt-deb.conf
 	sudo apt-ftparchive -c ${REPO_DIR}/apt-release.conf release dists/stable | sudo tee dists/stable/Release
-	sudo gpg --yes -u ${GPG_KEY} --passphrase "${GPG_PASSWORD}" --sign -bao dists/stable/Release.gpg dists/stable/Release
+	
+	if [[ -z ${GPG_PASSWORD} ]]; then
+		sudo gpg --yes -u ${GPG_KEY} --sign -bao dists/stable/Release.gpg dists/stable/Release
+	else
+		sudo gpg --yes -u ${GPG_KEY} --passphrase "${GPG_PASSWORD}" --sign -bao dists/stable/Release.gpg dists/stable/Release
+	fi
+
+	checkReturn $? "GPG signing failed"
 
 popd &>/dev/null
 
