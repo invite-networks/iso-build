@@ -1,5 +1,5 @@
 # ISO Build
-Custom debian based ISO builder
+Custom ISO Builder for Debian based linux distributions
 
 ## Summary
 
