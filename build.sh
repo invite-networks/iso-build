@@ -5,7 +5,7 @@ trap exit_clean INT
 
 # Check for root permissions
 if [ $(whoami) != 'root' ]; then
-	echo "You must run this script as root"
+	echo "You must run this script as root!"
 	exit 2
 fi
 
@@ -14,7 +14,7 @@ BASE_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 if [[ -z $1 ]]; then
 	echo "You must specifiy a project to build!"
-	echo "ex ./build.sh myproject"
+	echo "ex ./build.sh projects/myproject"
 	exit 2;
 
 else
@@ -27,7 +27,7 @@ else
 		PROJECT_DIR="${BASE_DIR}/projects/$1"
 	fi
 
-	# Check for the project directory exists
+	# Check that the project directory exists
 	if [[ ! -d "${PROJECT_DIR}" ]]; then
 		echo "The project was not found in ${PROJECT_DIR}" 
 		exit 2;
@@ -36,9 +36,9 @@ fi
 
 # Check that the settings file is with the build script 
 # We do this to be sure the script hasn't been moved so we don't cause any problems
-if [[ ! -f "${BASE_DIR}/settings" ]]; then
-	echo "We did not find a settings file with the build script!"
-	echo "Either create a settings file, or move the script back to the original location"
+if [[ ! -d "${BASE_DIR}/projects" ]]; then
+	echo "We did not find a project directory with the build script!"
+	echo "Either create the projects directory, or move the script back to the original location"
 	
 	exit 2	
 fi
