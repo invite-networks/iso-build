@@ -8,7 +8,7 @@ This is used to build a custom ISO from either an existing Debian, or Ubuntu ISO
 ## Installation
 
 ```
-$ git clone ONos-build-iso
+$ git clone invitenetworks/iso-build
 ```
 
 ## Usage
