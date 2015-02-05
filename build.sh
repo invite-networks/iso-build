@@ -55,22 +55,11 @@ if [[ ${2} == 'clean' ]]; then
 	# Start from scratch
 	if [[ ${3} == 'all' ]]; then 
 		clean_all
-		exit
 	fi
 
 	clean
+	
 	exit
-fi
-
-# Sync the ISO contents to the build directory if needd 
-if [[ ! -d ${ISO_DIR} ]]; then
-	echo "Syncing the src iso to '${ISO_DIR}'"
-	sudo rsync -aSH --exclude=/install/filesystem.squashfs --exclude=/doc ${SOURCE_DIR}/mnt/ ${ISO_DIR} 
-fi
-
-if [[ ! -d ${CHROOT_DIR} ]]; then
-	echo "Extracting the filesystem to ${CHROOT_DIR}"
-	sudo unsquashfs ${SOURCE_DIR}/mnt/install/filesystem.squashfs && sudo mv squashfs-root ${CHROOT_DIR} 
 fi
 
 # Setup the chroot enviroment
@@ -107,4 +96,8 @@ pushd ${BUILD_DIR} &>/dev/null
 	sudo genisoimage -D -r -V "${IMAGE_NAME}_${IMAGE_VERSION}" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o ../../${IMAGE_NAME}_${IMAGE_VERSION}.iso .
 
 popd &>/dev/null
+
+echo ""
+echo "Build is complete for ${PROJECT_DIR}/${IMAGE_NAME}_${IMAGE_VERSION}.iso"
+echo ""
 

@@ -30,8 +30,6 @@ function clean {
 
 # Start the build from scratch
 function clean_all {
-	clean
-
 	echo "Reinitilizing the cache directory"
         sudo rm -rf ${CACHE_PACKAGE_DIR} && mkdir ${CACHE_PACKAGE_DIR}	
 }	

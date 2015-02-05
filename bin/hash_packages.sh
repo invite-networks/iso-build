@@ -55,7 +55,7 @@ APT::FTPArchive::Release::Label "${AUTHOR}";
 APT::FTPArchive::Release::Components "main contrib";
 APT::FTPArchive::Release::Architectures "amd64";
 APT::FTPArchive::Release::Suite "stable";
-APT::FTPArchive::Release::Codename "${BUILD_CODENAME}";
+APT::FTPArchive::Release::Codename "${BUILD_NAME}";
 EOF
 
 pushd ${ISO_DIR} &>/dev/null

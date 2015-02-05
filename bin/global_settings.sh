@@ -13,13 +13,13 @@ fi
 # This is where we specify variables for the build type
 # Variables defined in the settings file will be be used instead of these if they are defined
 if [ ${BUILD_TYPE} == 'ubuntu' ]; then
-	${BUILD_NAME:='trusty'}
-	${IMAGE_NAME:='ubuntu-custom'}
-	${PACKAGE_URL:='http://archive.ubuntu.com/ubuntu'}
+	: ${BUILD_NAME:='trusty'}
+	: ${IMAGE_NAME:='ubuntu-custom'}
+	: ${PACKAGE_URL:='http://archive.ubuntu.com/ubuntu'}
 
-	if [ ${BUILD_NAME} == 'trusty' ]
-		${ORIG_ISO:='ubuntu-14.04.1-server-amd64.iso'}
-		${ORIG_ISO_DOWNLOAD:="http://releases.ubuntu.com/14.04.1/${ORIG_ISO}"}
+	if [ ${BUILD_NAME} == 'trusty' ]; then
+		: ${ORIG_ISO:='ubuntu-14.04.1-server-amd64.iso'}
+		: ${ORIG_ISO_DOWNLOAD:="http://releases.ubuntu.com/14.04.1/${ORIG_ISO}"}
 	else
 		echo 'We did not find a ${BUILD_NAME} that is supported for ubuntu!'
 		exit 2
@@ -34,10 +34,10 @@ else
 fi
 
 # Author of the ISO
-${AUTHOR:='INVITE Networks'}
+: ${AUTHOR:='INVITE Networks'}
 
 # Version for ISO name 
-${IMAGE_VERSION:='1'}
+: ${IMAGE_VERSION:='1'}
 
 # Drop the iso to get the name
 ORIG_NAME=$(echo "${ORIG_ISO}" | awk -F'.iso' '{print $1}') 

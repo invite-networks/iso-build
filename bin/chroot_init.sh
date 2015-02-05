@@ -36,8 +36,8 @@ chrootCommand ${CHROOT_DIR} "chmod +x /usr/sbin/policy-rc.d"
 echo 'en' > ${ISO_DIR}/isolinux/lang 
 chrootCommand ${CHROOT_DIR} "locale-gen en_US en_US.UTF-8"
 
-# Install the INVITE key
-chrootCommand ${CHROOT_DIR} "cat /import/local_key.gpg | apt-key add -"
+# Install the local GPG key 
+chrootCommand ${CHROOT_DIR} "cat /import/gpg.key | apt-key add -"
 
 popd &> /dev/null
 
